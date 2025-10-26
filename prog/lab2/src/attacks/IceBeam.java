@@ -5,7 +5,7 @@ import ru.ifmo.se.pokemon.Pokemon;
 import ru.ifmo.se.pokemon.SpecialMove;
 import ru.ifmo.se.pokemon.Type;
 
-public class IceBeam extends SpecialMove {
+public final class IceBeam extends SpecialMove {
 
     public IceBeam() {
         super(Type.ICE, 90, 1.0);

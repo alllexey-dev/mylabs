@@ -2,7 +2,7 @@ package attacks;
 
 import ru.ifmo.se.pokemon.*;
 
-public class RockSlide extends PhysicalMove {
+public final class RockSlide extends PhysicalMove {
 
     public RockSlide() {
         super(Type.ROCK, 75, 0.9);

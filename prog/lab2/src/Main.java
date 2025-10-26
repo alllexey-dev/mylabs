@@ -3,7 +3,7 @@ import ru.ifmo.se.pokemon.Battle;
 import ru.ifmo.se.pokemon.Pokemon;
 
 // 30306
-public class Main {
+public final class Main {
     public static void main(String[] args) {
         Battle b = new Battle();
         Pokemon p1 = new Lickilicky("bob", 40);

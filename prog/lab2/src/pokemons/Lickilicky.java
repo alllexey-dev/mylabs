@@ -2,7 +2,7 @@ package pokemons;
 
 import attacks.FocusBlast;
 
-public class Lickilicky extends Lickitung {
+public final class Lickilicky extends Lickitung {
 
     public Lickilicky(String s, int i) {
         super(s, i);

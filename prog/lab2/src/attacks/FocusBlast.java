@@ -5,7 +5,7 @@ import ru.ifmo.se.pokemon.SpecialMove;
 import ru.ifmo.se.pokemon.Stat;
 import ru.ifmo.se.pokemon.Type;
 
-public class FocusBlast extends SpecialMove {
+public final class FocusBlast extends SpecialMove {
 
     public FocusBlast() {
         super(Type.FIGHTING, 120, 0.7);

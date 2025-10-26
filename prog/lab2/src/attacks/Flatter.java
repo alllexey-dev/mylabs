@@ -2,7 +2,7 @@ package attacks;
 
 import ru.ifmo.se.pokemon.*;
 
-public class Flatter extends StatusMove {
+public final class Flatter extends StatusMove {
 
     public Flatter() {
         super(Type.DARK, 0, 1.0);

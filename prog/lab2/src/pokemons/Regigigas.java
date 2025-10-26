@@ -6,7 +6,7 @@ import attacks.RockSlide;
 import attacks.ThunderPunch;
 import ru.ifmo.se.pokemon.Pokemon;
 
-public class Regigigas extends Pokemon {
+public final class Regigigas extends Pokemon {
 
     public Regigigas(String s, int i) {
         super(s, Math.min(i, 12));

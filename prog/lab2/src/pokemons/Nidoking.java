@@ -2,7 +2,7 @@ package pokemons;
 
 import attacks.Rest;
 
-public class Nidoking extends Nidorino {
+public final class Nidoking extends Nidorino {
 
     public Nidoking(String s, int i) {
         super(s, i);
