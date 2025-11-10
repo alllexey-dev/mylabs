@@ -1,12 +1,27 @@
 package attacks;
 
-import ru.ifmo.se.pokemon.PhysicalMove;
-import ru.ifmo.se.pokemon.Type;
+import ru.ifmo.se.pokemon.*;
 
 public final class Facade extends PhysicalMove {
 
     public Facade() {
         super(Type.NORMAL, 70, 1.0);
+    }
+
+    private boolean criticalHit = false;
+
+    @Override
+    protected double calcCriticalHit(Pokemon p1, Pokemon p2) {
+        double crit = super.calcCriticalHit(p1, p2);
+        criticalHit = crit > 1;
+        return crit;
+    }
+
+    @Override
+    protected void applyOppDamage(Pokemon pokemon, double v) {
+        super.applyOppDamage(pokemon, v);
+        if (!criticalHit) return;
+        CriticalHitHelper.handleCriticalHit(pokemon);
     }
 
     @Override
