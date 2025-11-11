@@ -27,11 +27,9 @@ sealed class Element {
     }
 
     fun asString(): String = this.toString()
-    fun asBool(): Boolean = (this as? BoolElement)?.value ?: asString().toBoolean()
-    fun asInt(): Int = (this as? IntElement)?.value ?: (this as? LongElement)?.value?.toInt() ?: asString().toInt()
-    fun asLong(): Long = (this as? LongElement)?.value ?: (this as? IntElement)?.value?.toLong() ?: asString().toLong()
-    fun asDouble(): Double = (this as? DoubleElement)?.value ?: (this as? FloatElement)?.value?.toDouble()
-    ?: (this as? LongElement)?.value?.toDouble() ?: asString().toDouble()
-    fun asFloat(): Float = (this as? FloatElement)?.value ?: (this as? DoubleElement)?.value?.toFloat()
-    ?: (this as? LongElement)?.value?.toFloat() ?: asString().toFloat()
+    fun asBool(): Boolean = asString().toBoolean()
+    fun asInt(): Int = asString().toInt()
+    fun asLong(): Long = asString().toLong()
+    fun asDouble(): Double = asString().toDouble()
+    fun asFloat(): Float = asString().toFloat()
 }
