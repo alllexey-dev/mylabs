@@ -22,6 +22,7 @@ class IniDeserializer : Deserializer() {
             val name = line.substring(0, splitPos).trim()
             val value = line.substring(splitPos + 1)
             val primitiveList = deserializePrimitiveList(value)
+            if (name.contains(" ")) throw IllegalArgumentException("Malformed variable name at line $index in INI format: \"$line\"")
             val pair = if (primitiveList.value.isEmpty()) {
                 null
             } else if (primitiveList.value.size == 1) {
