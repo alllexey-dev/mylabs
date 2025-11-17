@@ -14,28 +14,32 @@ class IniDeserializer : Deserializer() {
         lines.forEachIndexed { index, line ->
             if (line.isBlank()) return@forEachIndexed
             if (line.startsWith('[') && line.endsWith(']')) {
-                objectContext = line.substring(1, line.length - 1)
+                objectContext = line.substring(1, line.length - 1).trim()
+                if (!isValidName(objectContext)) throw IllegalArgumentException("Malformed section name at line $index: \"$line\"")
                 return@forEachIndexed
             }
             val splitPos = line.indexOfFirst { it == '=' }
             if (splitPos == -1) throw IllegalArgumentException("Malformed line $index in INI format: \"$line\"")
             val name = line.substring(0, splitPos).trim()
+            if (!isValidName(name)) throw IllegalArgumentException("Malformed variable name at line $index in INI format: \"$line\"")
+            val appendContext = if (name.contains(".")) "." + name.substring(0, name.indexOfLast { it == '.' }) else ""
+            val actualContext = objectContext?.let { it + appendContext }
+            val fieldName = if (name.contains(".")) name.substring(name.indexOfLast { it == '.' } + 1) else name
             val value = line.substring(splitPos + 1)
             val primitiveList = deserializePrimitiveList(value)
-            if (name.contains(" ")) throw IllegalArgumentException("Malformed variable name at line $index in INI format: \"$line\"")
             val pair = if (primitiveList.value.isEmpty()) {
                 null
             } else if (primitiveList.value.size == 1) {
-                name to primitiveList.value[0]
+                fieldName to primitiveList.value[0]
             } else {
-                name to primitiveList
+                fieldName to primitiveList
             }
 
             if (pair != null) {
-                val map = if (objectContext == null) rootElements
-                else contextElements.computeIfAbsent(objectContext) { mutableMapOf() }
+                val map = if (actualContext == null) rootElements
+                else contextElements.computeIfAbsent(actualContext) { mutableMapOf() }
                 if (map.containsKey(pair.first)) {
-                    println("WARN: Duplicate key ${pair.first} in ${objectContext ?: "root"}")
+                    println("WARN: Duplicate key ${pair.first} in ${actualContext ?: "root"}")
                 }
                 map[pair.first] = pair.second
             }
@@ -62,5 +66,9 @@ class IniDeserializer : Deserializer() {
 
 
         return Element.ObjectElement(rootElements)
+    }
+
+    private fun isValidName(name: String): Boolean {
+        return !(name.contains(" ") || name.endsWith(".") || name.startsWith("."))
     }
 }
