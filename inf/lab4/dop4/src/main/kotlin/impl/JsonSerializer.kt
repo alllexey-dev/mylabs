@@ -48,6 +48,6 @@ class JsonSerializer(
     }
 
     fun increaseIndentation(str: String): String {
-        return str.lines().joinToString(separator = "\n") { l -> "    $l" }
+        return str.lines().joinToString(separator = "\n") { l -> "  $l" }
     }
 }
