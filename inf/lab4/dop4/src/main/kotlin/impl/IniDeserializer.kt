@@ -31,8 +31,12 @@ class IniDeserializer : Deserializer() {
             }
 
             if (pair != null) {
-                if (objectContext == null) rootElements.put(pair.first, pair.second)
-                else contextElements.computeIfAbsent(objectContext) { mutableMapOf() }.put(pair.first, pair.second)
+                val map = if (objectContext == null) rootElements
+                else contextElements.computeIfAbsent(objectContext) { mutableMapOf() }
+                if (map.containsKey(pair.first)) {
+                    println("WARN: Duplicate key ${pair.first} in ${objectContext ?: "root"}")
+                }
+                map[pair.first] = pair.second
             }
         }
 

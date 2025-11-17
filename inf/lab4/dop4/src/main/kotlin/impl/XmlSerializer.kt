@@ -14,7 +14,7 @@ class XmlSerializer(
     }
 
     override fun serialize(elem: Element, depth: Int): String {
-        return when (elem) {
+        val res = when (elem) {
             is Element.StringElement -> elem.value
             is Element.BoolElement -> elem.value.toString()
             is Element.IntElement -> elem.value.toString()
@@ -24,6 +24,15 @@ class XmlSerializer(
             is Element.ListElement -> serializeList(elem, depth)
             is Element.ObjectElement -> serializeObject(elem, depth)
         }
+        if (depth == 0) return wrapInRoot(res)
+        return res
+    }
+
+    fun wrapInRoot(str: String): String {
+        if (prettyPrinting) {
+            return "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<root>\n${increaseIndentation(str)}\n</root>"
+        }
+        return "<?xml version=\"1.0\" encoding=\"UTF-8\"?><root>$str</root>"
     }
 
     fun serializeList(element: Element.ListElement, depth: Int = 0): String {
