@@ -6,7 +6,7 @@
 
 import re
 
-def check_cron(s):
+def check_cron(cron):
     min_pattern = r"(\*|([0-5]?\d)(-[0-5]?\d)?|([0-5]?\d)(,([0-5]?\d))+)(/[0-5]?\d)?"
     hours_pattern = r"(\*|([01]?\d|2[0-3])(-([01]?\d|2[0-3]))?|([01]?\d|2[0-3])(,([01]?\d|2[0-3]))+)(/([01]?\d|2[0-3]))?"
     day_month_pattern = r"(\*|([1-9]|[12]\d|3[01])(-([1-9]|[12]\d|3[01]))?|([1-9]|[12]\d|3[01])(,([1-9]|[12]\d|3[01]))+)(/([1-9]|[12]\d|3[01]))?"
@@ -15,10 +15,21 @@ def check_cron(s):
 
     cron_regex = re.compile(fr"^\s*{min_pattern}\s+{hours_pattern}\s+{day_month_pattern}\s+{month_pattern}\s+{day_week_pattern}\s*$")
 
-    if cron_regex.match(s):
-        return True
+    if cron_regex.match(cron):
+        return check_ranges(cron)
     else:
         return False
+
+def check_ranges(cron):
+    split = cron.split(" ")
+
+    for s in split:
+        ranges = re.findall(r'(\d+)-(\d+)', s)
+        for r in ranges:
+            start, end = int(r[0]), int(r[1])
+            if start > end:
+                return False
+    return True
 
 tests = {
     "*/15 0 1,15 * 1-5": True,
@@ -30,7 +41,8 @@ tests = {
     "0 24 * * *": False,
     "0 0 * a *": False,
     "0 0 * 13 *": False,
-    "* * * * -5": False
+    "* * * * -5": False,
+    "0 0,12 1 */2 5-6": False
 }
 
 for k, v in tests.items():
