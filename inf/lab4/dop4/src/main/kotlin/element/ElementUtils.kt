@@ -4,6 +4,7 @@ import sun.reflect.ReflectionFactory
 import annotations.Deserialized
 import annotations.Serialized
 import java.lang.reflect.Field
+import java.lang.reflect.ParameterizedType
 import java.lang.reflect.Type
 
 object ElementUtils {
@@ -28,7 +29,7 @@ object ElementUtils {
 
     private fun toObject(element: Element, type: Type): Any? {
         return when (type) {
-            is java.lang.reflect.ParameterizedType -> {
+            is ParameterizedType -> {
                 val rawType = type.rawType as Class<*>
                 if (List::class.java.isAssignableFrom(rawType)) {
                     val elementType = type.actualTypeArguments[0]
