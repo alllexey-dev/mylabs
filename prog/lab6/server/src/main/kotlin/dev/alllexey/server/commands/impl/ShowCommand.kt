@@ -13,7 +13,9 @@ object ShowCommand : ServerCommand(
 
     override fun execute(args: List<String>, context: CommandContext): Response {
         return Response.ElementsResponse(
-            context.app.collectionWrapper.items().map { ObjectElementBuilder.fromObject(it) }
+            context.app.collectionWrapper.items()
+                .sortedWith {o1, o2 -> o1.compareTo(o2.name)}
+                .map { ObjectElementBuilder.fromObject(it) }
         )
     }
 }

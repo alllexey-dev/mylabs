@@ -1,6 +1,7 @@
 plugins {
     kotlin("jvm")
     application
+    id("com.github.johnrengelman.shadow") version "8.1.1"
 }
 
 group = "dev.alllexey"
@@ -11,7 +12,7 @@ repositories {
 }
 
 application {
-    mainClass.set("dev.alllexey.client.MainKt")
+    mainClass.set("dev.alllexey.client.ClientMainKt")
 }
 
 dependencies {
@@ -22,6 +23,13 @@ dependencies {
 tasks.test {
     useJUnitPlatform()
 }
+
+tasks.shadowJar {
+    manifest {
+        attributes["Main-Class"] = application.mainClass.get()
+    }
+}
+
 kotlin {
     jvmToolchain(17)
 }

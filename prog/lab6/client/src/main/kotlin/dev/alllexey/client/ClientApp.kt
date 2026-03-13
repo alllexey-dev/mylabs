@@ -50,9 +50,6 @@ class ClientApp(
             responseHandler.handle(it)
         }
 
-        logger.info("Trying to request commands...")
-        nioClient.send(Request.GetAllServerCommands)
-
         val scanner = Scanner(System.`in`)
 
         while (scanner.hasNextLine()) {

@@ -7,17 +7,22 @@ import dev.alllexey.server.data.HashMapCollectionWrapper
 import dev.alllexey.server.io.impl.CustomFileReader
 import dev.alllexey.server.io.impl.CustomFileWriter
 import dev.alllexey.server.model.SpaceMarine
+import dev.alllexey.server.network.NioServer
 import dev.alllexey.server.network.RequestHandler
-import dev.alllexey.server.network.ServerWrapper
 import java.io.File
 import java.util.Scanner
+import java.util.logging.Logger
+import kotlin.concurrent.thread
+import kotlin.system.exitProcess
 
 class App(
     val filenameProvider: () -> String,
     serverPort: Int,
 ) {
 
-    val serverWrapper = ServerWrapper(this, serverPort)
+    val logger: Logger = Logger.getLogger(App::class.qualifiedName)
+
+    val serverWrapper = NioServer(this, serverPort)
     val requestHandler = RequestHandler(this)
     val commandExecutor = CommandExecutor(this)
 
@@ -41,20 +46,31 @@ class App(
 
     fun start() {
         loadCollection()
-        serverWrapper.start()
+        thread(name = "NioServerThread") {
+            serverWrapper.start()
+        }
+
         val scanner = Scanner(System.`in`)
 
-        while (scanner.hasNextLine()) {
-            val command = scanner.nextLine()
-            if (command.startsWith("save")) {
-                save()
-            } else {
-                println("Неизвестная команда")
+        try {
+            while (scanner.hasNextLine()) {
+                val command = scanner.nextLine()
+                if (command.startsWith("save")) {
+                    save()
+                } else if (command.startsWith("exit")) {
+                    save()
+                    exitProcess(0)
+                } else {
+                    println("Неизвестная команда")
+                }
             }
+        } catch (e: InterruptedException) {
+            save()
         }
     }
 
     fun save() {
+        logger.info("Сохранение коллекции")
         val filename = filenameProvider.invoke()
         val items = collectionWrapper.items()
         val content = serializer.serializeCollection(items)

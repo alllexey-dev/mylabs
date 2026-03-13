@@ -19,4 +19,8 @@ data class Chapter(
     val marinesCount: Long,
     @LocalizedName("название мира")
     val world: String?,
-)
+) : Comparable<String> {
+
+    override fun compareTo(other: String) = name.compareTo(other)
+
+}

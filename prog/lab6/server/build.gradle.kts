@@ -2,6 +2,7 @@ plugins {
     kotlin("jvm")
     kotlin("plugin.serialization") version "2.0.0"
     application
+    id("com.github.johnrengelman.shadow") version "8.1.1"
 }
 
 group = "dev.alllexey"
@@ -19,7 +20,13 @@ dependencies {
 }
 
 application {
-    mainClass.set("dev.alllexey.server.MainKt")
+    mainClass.set("dev.alllexey.server.ServerMainKt")
+}
+
+tasks.shadowJar {
+    manifest {
+        attributes["Main-Class"] = application.mainClass.get()
+    }
 }
 
 tasks.test {

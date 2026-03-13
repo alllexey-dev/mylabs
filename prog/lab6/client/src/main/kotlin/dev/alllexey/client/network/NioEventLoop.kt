@@ -102,6 +102,9 @@ class NioEventLoop(
         if (channel.finishConnect()) {
             key.interestOps(SelectionKey.OP_READ)
             logger.info("Connected to server!")
+
+            logger.info("Trying to request commands...")
+            send(Request.GetAllServerCommands)
         }
     }
 

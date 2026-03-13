@@ -41,5 +41,9 @@ data class SpaceMarine(
     val meleeWeapon: MeleeWeapon?,
     @LocalizedName("данные части")
     val chapter: Chapter,
-) : IdHolder
+) : IdHolder, Comparable<String> {
+
+    override fun compareTo(other: String) = name.compareTo(other)
+
+}
 
